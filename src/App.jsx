@@ -10,6 +10,7 @@ function handleInputChange(e,stateFunction){
 
 function App(){
     const [clickedImages, setClickedImages] = useState([]);
+    const [scoresArr, setScores] = useState({currScore:0,highScore:0});
     const [images, setImage] = useState([]);
     const [query, setQuery] = useState("");
 
@@ -19,6 +20,24 @@ function App(){
         const shuffledImagesArr = imagesArr.sort(()=> 0.5 - Math.random());
         setImage([...shuffledImagesArr]);
     }   
+
+    function checkImage(e,image){
+        const link = e.target.src;
+        let score = scoresArr.currScore;
+        let currHighScore = scoresArr.highScore;
+
+        if(clickedImages.includes(image)){
+            setScores(prev => ({...prev,currScore:0}));
+            if(score > currHighScore){setScores(prev=>({...prev,highScore:score}))};
+            setClickedImages([]);
+            return
+        }
+        else{
+            setScores(prev => ({...prev,currScore:score++}));
+        }
+
+        setClickedImages(prev=>[...prev,image]);
+    }
 
     useEffect(()=>{
         images.sort(()=>0.5 - Math.random());
@@ -31,20 +50,21 @@ function App(){
             <div>
                 {
                     images.slice(0,10).map((image,index)=>(
-                        <img className="card" src={image} onClick={()=>{setClickedImages(prev=>[...prev,image])}} onError={(e) => {
+                        <img className="card" src={image} onClick={(e)=>checkImage(e,image)} onError={(e) => {
                             const filtered = images.filter(item => item != image);
                             setImage(filtered);
                         }} key={"image"+index}/>
                     ))
                 }
             </div>
+            <div>Score: {scoresArr.currScore}</div>
+            <div>High Score: {scoresArr.highScore}</div>
         </div>
     )
 }
 
 export default App
 
-// Shuffling
 // Scoring when right
 // Scoring when wrong
 // UI
