@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { search } from "./searchApi"
 import "./App.css"
 
@@ -9,6 +9,7 @@ function handleInputChange(e,stateFunction){
 }
 
 function App(){
+    const [clickedImages, setClickedImages] = useState([]);
     const [images, setImage] = useState([]);
     const [query, setQuery] = useState("");
 
@@ -16,9 +17,12 @@ function App(){
         const data = await search(api,query);
         const imagesArr = (data["inline_images"] || []).map(image => {return image["original"]["link"]});
         const shuffledImagesArr = imagesArr.sort(()=> 0.5 - Math.random());
-        console.log(shuffledImagesArr);
         setImage([...shuffledImagesArr]);
     }   
+
+    useEffect(()=>{
+        images.sort(()=>0.5 - Math.random());
+    },[clickedImages])
 
     return(
         <div>
@@ -27,9 +31,9 @@ function App(){
             <div>
                 {
                     images.slice(0,10).map((image,index)=>(
-                        <img className="card" src={image} onError={(e) => {
+                        <img className="card" src={image} onClick={()=>{setClickedImages(prev=>[...prev,image])}} onError={(e) => {
                             const filtered = images.filter(item => item != image);
-                            setImage([...filtered]);
+                            setImage(filtered);
                         }} key={"image"+index}/>
                     ))
                 }
@@ -39,3 +43,8 @@ function App(){
 }
 
 export default App
+
+// Shuffling
+// Scoring when right
+// Scoring when wrong
+// UI
