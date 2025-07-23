@@ -8,6 +8,11 @@ function handleInputChange(e,stateFunction){
     stateFunction(e.target.value);
 }
 
+function handleImageError(link,images,stateFunc){
+    const filtered = images.filter(currLink => currLink != link);
+    stateFunc(filtered);
+}
+
 function App(){
     const [clickedImages, setClickedImages] = useState([]);
     const [scoresArr, setScores] = useState({currScore:0,highScore:0});
@@ -45,26 +50,27 @@ function App(){
 
     return(
         <div>
-            <input type="text" value={query} onChange={(e)=>{handleInputChange(e,setQuery)}}/>
-            <button type="button" onClick={submitQuery}>SUBMIT</button>
-            <div>
+            <div id="header">
+                <div id="scores">
+                    <div>Score: {scoresArr.currScore}</div>
+                    <div>High Score: {scoresArr.highScore}</div>
+                </div>
+                <div id="query">
+                    <input type="text" value={query} onChange={(e)=>{handleInputChange(e,setQuery)}} placeholder="search for images here"/>
+                    <button type="button" onClick={submitQuery}>SUBMIT</button>
+                </div>
+            </div>
+            <div id="images">
                 {
-                    images.slice(0,10).map((image,index)=>(
-                        <img className="card" src={image} onClick={(e)=>checkImage(e,image)} onError={(e) => {
-                            const filtered = images.filter(item => item != image);
-                            setImage(filtered);
-                        }} key={"image"+index}/>
+                    images.slice(0,10).map(link => (
+                        <img src={link} className="card" onClick={(e)=>{checkImage(e,link)}} onError={()=>{handleImageError(link,images,setImage)}}/>
                     ))
                 }
             </div>
-            <div>Score: {scoresArr.currScore}</div>
-            <div>High Score: {scoresArr.highScore}</div>
         </div>
     )
 }
 
 export default App
 
-// Scoring when right
-// Scoring when wrong
 // UI

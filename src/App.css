@@ -1,4 +1,53 @@
+#header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+#images{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 10px;
+}
+
+#query input[type="text"],
+#query button{
+    padding: 3px;
+    border-radius: 3px;
+    border: 1px solid #A30075;
+}
+
+#query button{
+    background-color: #A30075;
+    border: none;
+    color: white;
+}
+
+#query button:hover{
+    cursor: pointer;
+    background-color: rgb(255, 132, 152);
+}
+
+#query,
+#scores
+{
+    display: flex;
+    gap: 10px;
+}
+
 .card{
-    width: 300px;
+    width: 250px;
     height: 300px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover{
+    cursor: pointer;
+    background-color: #ffe58a;
+    transform: scale(1.02);
+    box-shadow: 0 0 10px #A30075;
 }
