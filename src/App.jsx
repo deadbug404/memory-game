@@ -35,7 +35,7 @@ function App(){
         let currHighScore = scoresArr.highScore;
 
         if(clickedImages.includes(image)){
-            setScores(prev => ({...prev,currScore:0}));
+            setScores(prev => ({...prev, currScore: prev.currScore + 1}));
             if(score > currHighScore){setScores(prev=>({...prev,highScore:score}))};
             setClickedImages([]);
             return
