@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 import { search } from "./searchApi"
 import "./App.css"
 
-const api = "";
+const api = import.meta.env.VITE_API_KEY;
 
 function handleInputChange(e,stateFunction){
     stateFunction(e.target.value);
