@@ -9,8 +9,12 @@ function handleInputChange(e,stateFunction){
 }
 
 function handleImageError(link,images,stateFunc){
-    const filtered = images.filter(currLink => currLink != link);
-    stateFunc(filtered);
+    let filtered = images.filter(currLink => currLink != link);
+    stateFunc([...filtered]);
+}
+
+function cleanImageURL(url) {
+  return url.replace(/(\.(jpg|jpeg|png|gif|webp|bmp|svg))[^.]*$/i, '$1');
 }
 
 function App(){
@@ -21,9 +25,8 @@ function App(){
 
     async function submitQuery(){
         const data = await search(api,query);
-        const imagesArr = (data["inline_images"] || []).map(image => {return image["original"]["link"]});
-        const shuffledImagesArr = imagesArr.sort(()=> 0.5 - Math.random());
-        setImage([...shuffledImagesArr]);
+        const imagesArr = (data || []).map(object => {return object["original"]["link"]});
+        setImage([...imagesArr]);
     }   
 
     function checkImage(e,image){
@@ -62,9 +65,9 @@ function App(){
             </div>
             <div id="images">
                 {
-                    images.slice(0,10).map(link => (
-                        <img src={link} className="card" onClick={(e)=>{checkImage(e,link)}} onError={()=>{handleImageError(link,images,setImage)}}/>
-                    ))
+                    (images.length > 0) ? images.slice(0,10).map(link => (
+                        <img src={cleanImageURL(link)} className="card" onClick={(e)=>{checkImage(e,link)}} onError={()=>{handleImageError(link,images,setImage)}} key={"image"+link}/>
+                    )) : <p>No images found</p>
                 }
             </div>
         </div>
@@ -72,5 +75,3 @@ function App(){
 }
 
 export default App
-
-// UI
